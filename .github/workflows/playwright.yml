@@ -45,22 +45,42 @@ jobs:
     - name: Create backend .env file
       working-directory: ./backend
       run: |
-        echo "DATABASE_URL=postgresql://errandbit:test_password@localhost:5432/errandbit_test" > .env
-        echo "NODE_ENV=test" >> .env
-        echo "JWT_SECRET=QkZ2YVpQZGhqNTN3V3R4L1pNeEVaT2R0Z3pRT0xHdUpoSlY1bVZQVjJqSWZtS3N6a0pTSVhZbVE9PQ==" >> .env
-        echo "JWT_REFRESH_SECRET=dGVzdF9qd3RfcmVmcmVzaF9zZWNyZXRfa2V5X2Zvcl9jaV90ZXN0aW5nX21pbmltdW1fMzJfY2hhcmFjdGVycw==" >> .env
-        echo "PORT=3000" >> .env
+        cat > .env << 'ENVEOF'
+DATABASE_URL=postgresql://errandbit:test_password@localhost:5432/errandbit_test
+NODE_ENV=test
+JWT_SECRET=QkZ2YVpQZGhqNTN3V3R4L1pNeEVaT2R0Z3pRT0xHdUpoSlY1bVZQVjJqSWZtS3N6a0pTSVhZbVE9PQ==
+JWT_REFRESH_SECRET=dGVzdF9qd3RfcmVmcmVzaF9zZWNyZXRfa2V5X2Zvcl9jaV90ZXN0aW5nX21pbmltdW1fMzJfY2hhcmFjdGVycw==
+PORT=3000
+ENVEOF
         echo "=== .env file contents ==="
         cat .env
-        echo "=== JWT_SECRET length check ==="
+        echo ""
+        echo "=== Checking JWT_SECRET ==="
+        grep JWT_SECRET .env
+        echo "=== JWT_SECRET length (including newline) ==="
         grep JWT_SECRET .env | cut -d= -f2 | wc -c
+        echo "=== JWT_SECRET value ==="
+        grep JWT_SECRET .env | cut -d= -f2
     
     - name: Run database migrations
       working-directory: ./backend
       run: npm run migrate || true
     
+    - name: Verify .env exists
+      working-directory: ./backend
+      run: |
+        ls -la .env || echo ".env file not found!"
+        echo "=== Final .env check before starting server ==="
+        cat .env
+    
     - name: Start backend server
       working-directory: ./backend
+      env:
+        DATABASE_URL: postgresql://errandbit:test_password@localhost:5432/errandbit_test
+        NODE_ENV: test
+        JWT_SECRET: QkZ2YVpQZGhqNTN3V3R4L1pNeEVaT2R0Z3pRT0xHdUpoSlY1bVZQVjJqSWZtS3N6a0pTSVhZbVE9PQ==
+        JWT_REFRESH_SECRET: dGVzdF9qd3RfcmVmcmVzaF9zZWNyZXRfa2V5X2Zvcl9jaV90ZXN0aW5nX21pbmltdW1fMzJfY2hhcmFjdGVycw==
+        PORT: 3000
       run: |
         npm run dev &
         npx wait-on http://localhost:3000/health --timeout 60000
