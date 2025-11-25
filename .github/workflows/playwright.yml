@@ -48,8 +48,8 @@ jobs:
         cat > .env << EOF
         DATABASE_URL=postgresql://errandbit:test_password@localhost:5432/errandbit_test
         NODE_ENV=test
-        JWT_SECRET=test_secret
-        JWT_REFRESH_SECRET=test_refresh_secret
+        JWT_SECRET=test_jwt_secret_key_for_ci_testing_minimum_32_characters_long
+        JWT_REFRESH_SECRET=test_jwt_refresh_secret_key_for_ci_testing_minimum_32_characters
         PORT=3000
         EOF
     
