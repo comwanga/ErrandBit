@@ -11,7 +11,7 @@
  * - Screen reader announcements
  */
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useId } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { useFocusTrap } from '../hooks/useKeyboardNavigation'
@@ -45,8 +45,8 @@ export function Modal({
   showCloseButton = true,
 }: ModalProps) {
   const modalRef = useFocusTrap(isOpen)
-  const titleId = useRef(`modal-title-${Date.now()}`)
-  const descId = useRef(`modal-desc-${Date.now()}`)
+  const titleId = useId()
+  const descId = useId()
 
   // Handle escape key
   useEffect(() => {
@@ -84,8 +84,8 @@ export function Modal({
   return createPortal(
     <div
       className="fixed inset-0 z-50 overflow-y-auto"
-      aria-labelledby={titleId.current}
-      aria-describedby={descId.current}
+      aria-labelledby={titleId}
+      aria-describedby={descId}
       role="dialog"
       aria-modal="true"
     >
@@ -105,7 +105,7 @@ export function Modal({
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
             <h2
-              id={titleId.current}
+              id={titleId}
               className="text-xl font-semibold text-gray-900 dark:text-white"
             >
               {title}
@@ -123,7 +123,7 @@ export function Modal({
           </div>
 
           {/* Content */}
-          <div id={descId.current} className="p-6">
+          <div id={descId} className="p-6">
             {children}
           </div>
         </div>

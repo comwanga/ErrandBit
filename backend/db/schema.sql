@@ -1,21 +1,34 @@
 -- ErrandBit Database Schema
+-- Non-KYC, Privacy-First Design
+-- 
+-- PRIVACY PRINCIPLES:
+-- - No real names, addresses, or government IDs stored
+-- - All identities are pseudonymous (display_name)
+-- - Phone/email are optional and unverified
+-- - Nostr support for decentralized identity
+-- - Location data used only for job proximity, never stored with identity
+-- - Reputation-based trust instead of identity verification
 
 -- Enable PostGIS extension for geospatial queries
 CREATE EXTENSION IF NOT EXISTS postgis;
 
--- Users table
+-- Users table (Pseudonymous Identity)
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   role VARCHAR(20) NOT NULL CHECK (role IN ('client', 'runner', 'admin')),
-  phone VARCHAR(20) UNIQUE,
-  phone_verified BOOLEAN DEFAULT FALSE,
-  email VARCHAR(255) UNIQUE,
-  email_verified BOOLEAN DEFAULT FALSE,
-  password_hash VARCHAR(255),
-  nostr_pubkey VARCHAR(64) UNIQUE,
+  
+  -- Authentication Methods (all optional, at least one required)
+  phone VARCHAR(20) UNIQUE,                -- Optional phone (unverified, for notifications only)
+  phone_verified BOOLEAN DEFAULT FALSE,    -- Currently unused, no verification
+  email VARCHAR(255) UNIQUE,               -- Optional email (unverified, for account recovery)
+  email_verified BOOLEAN DEFAULT FALSE,    -- Currently unused, no verification
+  password_hash VARCHAR(255),              -- Password for username/password auth
+  nostr_pubkey VARCHAR(64) UNIQUE,         -- Nostr public key for decentralized identity
+  
   auth_method VARCHAR(20) CHECK (auth_method IN ('phone', 'email', 'nostr')),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
+  
   CONSTRAINT auth_method_check CHECK (
     (auth_method = 'phone' AND phone IS NOT NULL) OR
     (auth_method = 'email' AND email IS NOT NULL) OR
@@ -28,20 +41,28 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_nostr_pubkey ON users(nostr_pubkey);
 CREATE INDEX idx_users_role ON users(role);
 
--- Runner profiles
+-- Runner profiles (Public Pseudonymous Identity)
+-- This is what users see - no personal information
 CREATE TABLE runner_profiles (
   id SERIAL PRIMARY KEY,
   user_id INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  display_name VARCHAR(100) NOT NULL,
-  bio TEXT,
-  lightning_address VARCHAR(255),
-  hourly_rate_cents INTEGER,
-  tags TEXT[],
-  location GEOGRAPHY(POINT, 4326),
-  avatar_url TEXT,
-  completion_rate DECIMAL(5,2) DEFAULT 0,
-  avg_rating DECIMAL(3,2) DEFAULT 0,
-  total_jobs INTEGER DEFAULT 0,
+  
+  -- Public Profile Information (all pseudonymous)
+  display_name VARCHAR(100) NOT NULL,      -- Pseudonym/nickname (e.g., "FastRunner", "LocalHelper")
+  bio TEXT,                                -- Optional self-description
+  lightning_address VARCHAR(255),          -- Public Lightning payment endpoint
+  hourly_rate_cents INTEGER,               -- Publicly visible rate
+  tags TEXT[],                             -- Skills/services offered
+  avatar_url TEXT,                         -- Optional profile picture (can be anonymous)
+  
+  -- Approximate Location (for job matching only)
+  location GEOGRAPHY(POINT, 4326),         -- Approximate area, not exact address
+  
+  -- Reputation Metrics (earned through completed jobs)
+  completion_rate DECIMAL(5,2) DEFAULT 0,  -- % of accepted jobs completed
+  avg_rating DECIMAL(3,2) DEFAULT 0,       -- Average star rating from clients
+  total_jobs INTEGER DEFAULT 0,            -- Number of completed jobs
+  
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );

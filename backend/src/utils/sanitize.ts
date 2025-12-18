@@ -12,6 +12,7 @@
 export function sanitizeText(input: string, maxLength: number = 10000): string {
   return input
     .trim()
+    // eslint-disable-next-line no-control-regex
     .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters including null bytes
     .replace(/\s+/g, ' ') // Normalize whitespace (collapse multiple spaces)
     .substring(0, maxLength); // Enforce max length

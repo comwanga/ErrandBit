@@ -46,12 +46,12 @@ jobs:
       working-directory: ./backend
       run: |
         cat > .env << 'ENVEOF'
-DATABASE_URL=postgresql://errandbit:test_password@localhost:5432/errandbit_test
-NODE_ENV=test
-JWT_SECRET=QkZ2YVpQZGhqNTN3V3R4L1pNeEVaT2R0Z3pRT0xHdUpoSlY1bVZQVjJqSWZtS3N6a0pTSVhZbVE9PQ==
-JWT_REFRESH_SECRET=dGVzdF9qd3RfcmVmcmVzaF9zZWNyZXRfa2V5X2Zvcl9jaV90ZXN0aW5nX21pbmltdW1fMzJfY2hhcmFjdGVycw==
-PORT=3000
-ENVEOF
+        DATABASE_URL=postgresql://errandbit:test_password@localhost:5432/errandbit_test
+        NODE_ENV=test
+        JWT_SECRET=QkZ2YVpQZGhqNTN3V3R4L1pNeEVaT2R0Z3pRT0xHdUpoSlY1bVZQVjJqSWZtS3N6a0pTSVhZbVE9PQ==
+        JWT_REFRESH_SECRET=dGVzdF9qd3RfcmVmcmVzaF9zZWNyZXRfa2V5X2Zvcl9jaV90ZXN0aW5nX21pbmltdW1fMzJfY2hhcmFjdGVycw==
+        PORT=3000
+          ENVEOF
         echo "=== .env file contents ==="
         cat .env
         echo ""

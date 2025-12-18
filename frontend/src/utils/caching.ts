@@ -347,9 +347,9 @@ export const CacheDebug = {
   monitorCache(queryClient: QueryClient): () => void {
     const unsubscribe = queryClient.getQueryCache().subscribe((event: { type?: string; query: Query }) => {
       if (event?.type === 'added') {
-        console.log('✅ Query added:', event.query.queryKey)
-      } else if (event?.type === 'removed') {
-        console.log('❌ Query removed:', event.query.queryKey)
+        console.log('[Cache] Query added:', event.query.queryKey)
+      } else if (event.type === 'removed') {
+        console.log('[Cache] Query removed:', event.query.queryKey)
       } else if (event?.type === 'updated') {
         console.log('🔄 Query updated:', event.query.queryKey)
       }

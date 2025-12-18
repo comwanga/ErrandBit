@@ -1,10 +1,21 @@
 # ErrandBit
 
-**Trust-minimized local services marketplace powered by Bitcoin Lightning**
+**Non-KYC, privacy-first local services marketplace powered by Bitcoin Lightning**
 
 ## Vision
 
-ErrandBit eliminates platform rent-seeking through Bitcoin Lightning payments, returning economic power to service providers while maintaining client protection through reputation and lightweight coordination.
+ErrandBit is a **fully non-KYC platform** that eliminates platform rent-seeking through Bitcoin Lightning payments, returning economic power to service providers while maintaining client protection through reputation and lightweight coordination. No real names, no ID verification, no bank accounts—just pseudonymous profiles, Lightning payments, and earned reputation.
+
+### Core Principles
+
+🔒 **Privacy by Default** - No KYC, no identity verification, fully pseudonymous  
+⚡ **Lightning-Native** - Instant settlements, low fees, global accessibility  
+🤝 **Reputation-Based Trust** - Earn trust through completed jobs, not documents  
+🌍 **Permissionless Access** - Anyone, anywhere can participate  
+💜 **Fedi-Compatible** - Embeddable in Fedi wallet communities  
+₿ **Bitcoin Values** - Aligned with sovereignty, privacy, and freedom
+
+See [NON_KYC_POLICY.md](NON_KYC_POLICY.md) for complete privacy policy and philosophy.
 
 ## Technology Stack
 

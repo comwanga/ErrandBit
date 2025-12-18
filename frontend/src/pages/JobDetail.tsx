@@ -207,7 +207,7 @@ export default function JobDetail() {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Leave a Review</h2>
             
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+              <div className="block text-sm font-medium text-gray-700 mb-2">Rating</div>
               <div className="flex items-center space-x-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -228,8 +228,9 @@ export default function JobDetail() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Review (optional)</label>
+              <label htmlFor="review-text" className="block text-sm font-medium text-gray-700 mb-2">Review (optional)</label>
               <textarea
+                id="review-text"
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
                 rows={4}

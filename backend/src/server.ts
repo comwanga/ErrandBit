@@ -13,6 +13,16 @@ import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import swaggerUi from 'swagger-ui-express';
 import logger, { stream } from './utils/logger.js';
 import { swaggerSpec } from './config/swagger.js';
+// Security middleware
+import {
+  securityHeaders,
+  apiRateLimiter,
+  authRateLimiter,
+  paymentRateLimiter,
+  corsOptions,
+  sanitizeRequest,
+  additionalSecurityHeaders,
+} from './middleware/security.middleware.js';
 // Routes
 import healthRouter from './routes/health.js';
 import authRouter from './routes/auth.routes.js'; // OTP-based auth
@@ -58,14 +68,11 @@ if (process.env['SENTRY_DSN'] && process.env.NODE_ENV === 'production') {
 const app: Express = express();
 const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 
-// Security middleware
-app.use(helmet());
+// Phase 6: Production Hardening - Security middleware
+app.use(securityHeaders); // Helmet with CSP
+app.use(additionalSecurityHeaders); // Custom security headers
 
-// CORS configuration - restrict in production
-const corsOptions = {
-  origin: isDevelopment ? '*' : (process.env.ALLOWED_ORIGINS || 'http://localhost:5173').split(','),
-  credentials: true,
-};
+// CORS configuration - using centralized secure config
 app.use(cors(corsOptions));
 
 // Body parsing
@@ -75,26 +82,27 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Logging
 app.use(morgan(isDevelopment ? 'dev' : 'combined', { stream }));
 
-// Sanitize user input
+// Sanitize user input - Phase 6 security
+app.use(sanitizeRequest);
 app.use(sanitizeBody);
 
-// Apply general rate limiting to all routes
-app.use(generalLimiter);
+// Apply API rate limiting
+app.use('/api', apiRateLimiter);
 
 // API Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
-app.use('/health', healthRouter);
-app.use('/auth-simple', authLimiter, authSimpleRefactoredRouter); // Refactored auth (clean architecture)
+app.use('/health', generalLimiter, healthRouter);
 app.use('/auth', authLimiter, authSimpleRouter); // Simple auth (no OTP) - legacy
+app.use('/auth/refactored', authLimiter, authSimpleRefactoredRouter); // Refactored auth (clean architecture)
 app.use('/auth/otp', authLimiter, authRouter); // OTP auth (optional)
 
 // Legacy routes (will be deprecated)
 app.use('/runners', runnersRouter);
 app.use('/jobs', jobsRouter);
 app.use('/reviews', reviewsRouter);
-app.use('/messages', messagesRouter);
+app.use('/messages', generalLimiter, messagesRouter);
 app.use('/payments', paymentLimiter, paymentsRouter);
 
 // New controller-based routes (clean architecture)

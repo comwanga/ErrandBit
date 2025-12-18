@@ -1,0 +1,8 @@
+{
+  "common": {
+    "welcome": "Welcome to ErrandBit",
+    "login": "Log In",
+    "logout": "Log Out",
+    "signup": "Sign Up"
+  }
+}

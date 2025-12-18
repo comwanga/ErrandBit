@@ -213,10 +213,39 @@ router.post('/login',
           return;
         }
 
-        // TODO: Verify code with Twilio or SMS provider
-        // For now, accept any 6-digit code for development
+        /**
+         * SMS Verification - Future Implementation
+         * 
+         * Production implementation should:
+         * 1. Use Twilio Verify API or similar service
+         * 2. Store verification sessions in Redis with TTL
+         * 3. Rate limit verification attempts per phone number
+         * 4. Log verification attempts for security monitoring
+         * 
+         * Example integration:
+         * const twilioClient = require('twilio')(accountSid, authToken);
+         * const verification = await twilioClient.verify.v2
+         *   .services(serviceSid)
+         *   .verificationChecks
+         *   .create({ to: phone, code });
+         * 
+         * if (verification.status !== 'approved') {
+         *   res.status(401).json({ error: 'Invalid verification code' });
+         *   return;
+         * }
+         */
+        
+        // Development mode: Accept any 6-digit code
+        if (process.env.NODE_ENV === 'production') {
+          res.status(501).json({ 
+            error: 'SMS authentication not yet implemented in production',
+            message: 'Please use username/password authentication'
+          });
+          return;
+        }
+        
         if (!/^\d{6}$/.test(code)) {
-          res.status(401).json({ error: 'Invalid verification code' });
+          res.status(401).json({ error: 'Invalid verification code format' });
           return;
         }
 
@@ -240,8 +269,46 @@ router.post('/login',
           return;
         }
 
-        // TODO: Verify Nostr signature
-        // For now, accept any signature for development
+        /**
+         * Nostr Authentication - Future Implementation
+         * 
+         * Production implementation should:
+         * 1. Verify the signature using nostr-tools library
+         * 2. Validate the event structure and timestamp
+         * 3. Prevent replay attacks with nonce tracking
+         * 4. Validate public key format (hex or npub)
+         * 
+         * Example integration:
+         * import { verifySignature, getEventHash } from 'nostr-tools';
+         * 
+         * const event = {
+         *   kind: 1,
+         *   created_at: Math.floor(Date.now() / 1000),
+         *   tags: [],
+         *   content: 'ErrandBit Login',
+         *   pubkey: nostr_pubkey,
+         * };
+         * 
+         * event.id = getEventHash(event);
+         * const isValid = verifySignature({
+         *   ...event,
+         *   sig: nostr_signature
+         * });
+         * 
+         * if (!isValid) {
+         *   res.status(401).json({ error: 'Invalid Nostr signature' });
+         *   return;
+         * }
+         */
+        
+        // Development mode: Accept any signature
+        if (process.env.NODE_ENV === 'production') {
+          res.status(501).json({ 
+            error: 'Nostr authentication not yet implemented in production',
+            message: 'Please use username/password authentication'
+          });
+          return;
+        }
 
         const result = await pool.query(
           'SELECT id, role, nostr_pubkey FROM users WHERE nostr_pubkey = $1',

@@ -68,16 +68,12 @@ export function useScreenSize(): 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' {
  * Detect if device has touch capability
  */
 export function useHasTouch(): boolean {
-  const [hasTouch, setHasTouch] = useState(false)
-
-  useEffect(() => {
-    setHasTouch(
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      // @ts-expect-error - msMaxTouchPoints is IE specific
-      navigator.msMaxTouchPoints > 0
-    )
-  }, [])
+  const [hasTouch] = useState(() => 
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0 ||
+    // @ts-expect-error - msMaxTouchPoints is IE specific
+    navigator.msMaxTouchPoints > 0
+  )
 
   return hasTouch
 }
@@ -112,12 +108,10 @@ export function useOrientation(): 'portrait' | 'landscape' {
  * Detect if user is on iOS
  */
 export function useIsIOS(): boolean {
-  const [isIOS, setIsIOS] = useState(false)
-
-  useEffect(() => {
+  const [isIOS] = useState(() => {
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as Window & { MSStream?: unknown }).MSStream
-    setIsIOS(iOS)
-  }, [])
+    return iOS
+  })
 
   return isIOS
 }
@@ -126,11 +120,7 @@ export function useIsIOS(): boolean {
  * Detect if user is on Android
  */
 export function useIsAndroid(): boolean {
-  const [isAndroid, setIsAndroid] = useState(false)
-
-  useEffect(() => {
-    setIsAndroid(/Android/.test(navigator.userAgent))
-  }, [])
+  const [isAndroid] = useState(() => /Android/.test(navigator.userAgent))
 
   return isAndroid
 }
@@ -139,23 +129,16 @@ export function useIsAndroid(): boolean {
  * Get safe area insets (for notched devices)
  */
 export function useSafeAreaInsets() {
-  const [insets, setInsets] = useState({
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  })
-
-  useEffect(() => {
+  const [insets] = useState(() => {
     const computedStyle = getComputedStyle(document.documentElement)
     
-    setInsets({
+    return {
       top: parseInt(computedStyle.getPropertyValue('--sat') || '0'),
       right: parseInt(computedStyle.getPropertyValue('--sar') || '0'),
       bottom: parseInt(computedStyle.getPropertyValue('--sab') || '0'),
       left: parseInt(computedStyle.getPropertyValue('--sal') || '0'),
-    })
-  }, [])
+    }
+  })
 
   return insets
 }
@@ -164,16 +147,14 @@ export function useSafeAreaInsets() {
  * Detect if device is in standalone mode (PWA)
  */
 export function useIsStandalone(): boolean {
-  const [isStandalone, setIsStandalone] = useState(false)
-
-  useEffect(() => {
+  const [isStandalone] = useState(() => {
     const standalone = 
       window.matchMedia('(display-mode: standalone)').matches ||
       // @ts-expect-error - standalone is iOS specific
       window.navigator.standalone === true
 
-    setIsStandalone(standalone)
-  }, [])
+    return standalone
+  })
 
   return isStandalone
 }
@@ -206,20 +187,16 @@ export function useViewport() {
  * Media query hook
  */
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(false)
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches)
 
   useEffect(() => {
     const media = window.matchMedia(query)
     
-    if (media.matches !== matches) {
-      setMatches(media.matches)
-    }
-
     const listener = () => setMatches(media.matches)
     media.addEventListener('change', listener)
     
     return () => media.removeEventListener('change', listener)
-  }, [matches, query])
+  }, [query])
 
   return matches
 }

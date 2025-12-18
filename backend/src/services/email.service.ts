@@ -107,27 +107,38 @@ export class EmailService {
     }
 
     try {
-      // TODO: Integrate with actual email provider (SendGrid, AWS SES, etc.)
-      // For now, using nodemailer as placeholder
+      /**
+       * Email Provider Integration - Future Implementation
+       * 
+       * Choose one of these production-ready email providers:
+       * 
+       * Option 1: SendGrid (Recommended)
+       * - npm install @sendgrid/mail
+       * - const sgMail = require('@sendgrid/mail');
+       * - sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+       * - await sgMail.send({ to, from, subject, text, html });
+       * 
+       * Option 2: AWS SES
+       * - npm install @aws-sdk/client-ses
+       * - const ses = new SESClient({ region: 'us-east-1' });
+       * - await ses.send(new SendEmailCommand({ ... }));
+       * 
+       * Option 3: Nodemailer with SMTP
+       * - npm install nodemailer
+       * - const transporter = nodemailer.createTransport({ host, port, auth });
+       * - await transporter.sendMail({ from, to, subject, text, html });
+       * 
+       * Option 4: Postmark
+       * - npm install postmark
+       * - const client = new postmark.ServerClient(apiKey);
+       * - await client.sendEmail({ From, To, Subject, TextBody, HtmlBody });
+       * 
+       * Current Status: Not implemented (emails logged only)
+       * Decision: Add email provider if notification features are required
+       * Priority: Low (not critical for MVP)
+       */
       
-      // Example with nodemailer (when installed):
-      // const nodemailer = require('nodemailer');
-      // const transporter = nodemailer.createTransport({
-      //   host: this.smtpHost,
-      //   port: this.smtpPort,
-      //   secure: this.smtpPort === 465,
-      //   auth: {
-      //     user: this.smtpUser,
-      //     pass: this.smtpPass
-      //   }
-      // });
-      //
-      // await transporter.sendMail({
-      //   from: this.alertEmailFrom,
-      //   to: Array.isArray(options.to) ? options.to.join(',') : options.to,
-      //   subject: options.subject,
-      //   text: options.text,
-      //   html: options.html
+      // Placeholder for future email provider integration
       // });
 
       logger.info('📧 Email sent successfully', {

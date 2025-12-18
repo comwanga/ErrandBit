@@ -6,11 +6,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useWebLN } from '../contexts/WebLNContext';
 import { jobService, Job } from '../services/job.service';
-
+import { WalletConnection } from '../components/WalletConnection';
+import { LightningPayment } from '../components/LightningPayment';
 import { formatCentsAsUsd } from '../utils/currency';
 import UniversalPayment from '../components/UniversalPayment';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -18,6 +21,7 @@ export default function PaymentPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
+  const { isEnabled: isWalletConnected, sendPayment } = useWebLN();
   
   const [job, setJob] = useState<Job | null>(null);
   const [invoice, setInvoice] = useState<any | null>(null);
@@ -26,6 +30,7 @@ export default function PaymentPage() {
   const [error, setError] = useState('');
   const [showPayment, setShowPayment] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [useWebLNPayment, setUseWebLNPayment] = useState(true);
 
   // Helper to get auth token
   const getAuthToken = () => {

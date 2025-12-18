@@ -110,7 +110,7 @@ export default function RunnerDetailPage() {
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Runner Profile</h1>
                 {runner.available && (
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 mt-1">
-                    ✓ Available Now
+                    Available Now
                   </span>
                 )}
               </div>

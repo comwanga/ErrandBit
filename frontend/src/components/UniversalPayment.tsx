@@ -316,10 +316,11 @@ export default function UniversalPayment({
               Copy Full Invoice
             </button>
             <div className="border-t pt-4 space-y-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="payment-preimage" className="block text-sm font-medium text-gray-700 mb-2">
                 After paying, paste the payment preimage:
               </label>
               <input
+                id="payment-preimage"
                 type="text"
                 value={manualProof}
                 onChange={(e) => {

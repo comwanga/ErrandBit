@@ -125,9 +125,9 @@ export default function FindRunnersPage() {
 
           {/* Location Display */}
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <div className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Your Location
-            </label>
+            </div>
             <div className="mt-1 flex items-center justify-between">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 {latitude.toFixed(4)}, {longitude.toFixed(4)}

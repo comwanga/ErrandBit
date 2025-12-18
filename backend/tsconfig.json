@@ -47,13 +47,12 @@
     "exactOptionalPropertyTypes": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "tests/**/*"
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "**/*.spec.ts",
-    "**/*.test.ts"
+    "dist"
   ],
   "ts-node": {
     "esm": true,

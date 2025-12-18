@@ -8,6 +8,7 @@ import eslint from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
+import globals from 'globals';
 
 export default [
   // Apply to all TypeScript files
@@ -22,9 +23,9 @@ export default [
         project: './tsconfig.json',
       },
       globals: {
-        node: true,
-        es2022: true,
-        jest: true,
+        ...globals.node,
+        ...globals.es2021,
+        ...globals.jest,
       },
     },
     plugins: {

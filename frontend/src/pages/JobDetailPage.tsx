@@ -413,7 +413,7 @@ export default function JobDetailPage() {
           
           {/* Star Rating */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rating</label>
+            <div className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rating</div>
             <div className="flex space-x-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -437,10 +437,11 @@ export default function JobDetailPage() {
 
           {/* Comment */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="review-comment" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Comment (optional)
             </label>
             <textarea
+              id="review-comment"
               value={reviewComment}
               onChange={(e) => setReviewComment(e.target.value)}
               rows={4}

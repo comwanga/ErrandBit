@@ -349,9 +349,9 @@ export default function ProfileEditPage() {
               </h3>
             </div>
             <div className="px-6 py-5">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <div className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                 Theme Preference
-              </label>
+              </div>
               <div className="space-y-3">
                 <div className="flex items-center">
                   <input

@@ -78,7 +78,7 @@ export function initSentry(): void {
     // Make Sentry available globally for ErrorBoundary
     (window as any).Sentry = Sentry;
 
-    console.log('✅ Sentry error tracking initialized');
+    console.log('[Sentry] Error tracking initialized');
   } else if (environment === 'production' && !dsn) {
     console.warn('⚠️ Sentry DSN not configured. Error tracking disabled.');
   }

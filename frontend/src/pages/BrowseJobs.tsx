@@ -63,8 +63,8 @@ export default function BrowseJobs() {
         }
       );
     } else {
-      // Geolocation not available, use default
-      setLocationReady(true);
+      // Geolocation not available, use default - use setTimeout to avoid cascading renders
+      setTimeout(() => setLocationReady(true), 0);
     }
   }, [isAuthenticated, navigate]);
 
@@ -133,9 +133,9 @@ export default function BrowseJobs() {
 
           {/* Location Display */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <div className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Your Location
-            </label>
+            </div>
             <div className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               {latitude.toFixed(4)}, {longitude.toFixed(4)}
             </div>
