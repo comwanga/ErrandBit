@@ -32,8 +32,8 @@ jobs:
         node-version: lts/*
         cache: 'npm'
     
-    - name: Install all dependencies (workspace)
-      run: npm ci --workspaces
+    - name: Install all dependencies (root + workspaces)
+      run: npm ci
     
     - name: Create backend .env file
       working-directory: ./backend
