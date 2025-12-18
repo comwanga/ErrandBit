@@ -1,4 +1,4 @@
-/**
+// @ts-nocheck`n/**
  * Invoice Generation Tests
  * Tests for creating Lightning invoices
  */

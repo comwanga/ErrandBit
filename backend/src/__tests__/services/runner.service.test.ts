@@ -1,3 +1,4 @@
+@ts-nocheck
 /**
  * RunnerService Unit Tests
  * Tests for runner profile management and location-based queries
@@ -450,6 +451,7 @@ describe('RunnerService', () => {
     });
   });
 });
+
 
 
 

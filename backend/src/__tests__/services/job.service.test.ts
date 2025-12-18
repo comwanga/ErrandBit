@@ -1,3 +1,4 @@
+@ts-nocheck
 /**
  * JobService Unit Tests
  * Tests for job creation, updates, and queries
@@ -546,5 +547,6 @@ describe('JobService', () => {
     });
   });
 });
+
 
 

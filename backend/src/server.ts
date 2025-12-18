@@ -5,7 +5,6 @@
 
 import express, { type Express } from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import * as Sentry from '@sentry/node';
@@ -17,8 +16,6 @@ import { swaggerSpec } from './config/swagger.js';
 import {
   securityHeaders,
   apiRateLimiter,
-  authRateLimiter,
-  paymentRateLimiter,
   corsOptions,
   sanitizeRequest,
   additionalSecurityHeaders,

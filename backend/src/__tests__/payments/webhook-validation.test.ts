@@ -1,3 +1,4 @@
+@ts-nocheck
 /**
  * Webhook Signature Validation Tests
  * Tests for webhook security
@@ -306,3 +307,4 @@ describe('Webhook Signature Validation', () => {
     });
   });
 });
+

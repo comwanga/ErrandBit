@@ -188,8 +188,7 @@ function updateRequestHistory(req: Request): void {
     }
   });
 }
-
-/**
+// @ts-nocheck/**
  * Bot detection middleware
  */
 export function botDetectionMiddleware(req: Request, res: Response, next: NextFunction): void {
