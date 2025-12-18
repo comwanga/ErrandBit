@@ -27,7 +27,6 @@ import {
 import healthRouter from './routes/health.js';
 import authRouter from './routes/auth.routes.js'; // OTP-based auth
 import authSimpleRouter from './routes/auth-simple.routes.js'; // Simple username/password auth
-import authSimpleRefactoredRouter from './routes/auth-simple-refactored.routes.js'; // Refactored auth routes
 import jobsRouter from './routes/jobs.routes.js'; // TypeScript
 import runnersRouter from './routes/runners.routes.js'; // TypeScript
 import paymentsRouter from './routes/payments.routes.js'; // TypeScript
@@ -95,7 +94,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Routes
 app.use('/health', generalLimiter, healthRouter);
 app.use('/auth', authLimiter, authSimpleRouter); // Simple auth (no OTP) - legacy
-app.use('/auth/refactored', authLimiter, authSimpleRefactoredRouter); // Refactored auth (clean architecture)
 app.use('/auth/otp', authLimiter, authRouter); // OTP auth (optional)
 
 // Legacy routes (will be deprecated)
