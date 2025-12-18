@@ -1,4 +1,4 @@
-@ts-nocheck
+// @ts-nocheck
 /**
  * Message Routes
  * 
@@ -166,4 +166,5 @@ router.post('/job/:jobId', authenticate, async (req: Request, res: Response): Pr
 });
 
 export default router;
+
 

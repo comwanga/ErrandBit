@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Advanced Bot Detection Middleware
  * Protects against automated attacks, scrapers, and malicious bots

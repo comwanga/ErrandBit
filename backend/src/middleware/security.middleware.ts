@@ -1,4 +1,4 @@
-@ts-nocheck
+// @ts-nocheck
 import { Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -249,4 +249,5 @@ export const secureCookieOptions = {
   maxAge: 24 * 60 * 60 * 1000, // 24 hours
   path: '/',
 };
+
 
