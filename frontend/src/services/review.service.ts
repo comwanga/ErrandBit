@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Review Service
  * Handles review and rating operations

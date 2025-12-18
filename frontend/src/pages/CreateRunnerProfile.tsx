@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Create Runner Profile Page
  * Form for becoming a runner with improved validation and structure

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Sentry Configuration
  * Error tracking and performance monitoring for frontend

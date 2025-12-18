@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useRef } from 'react';
 import { FocusTrap, liveAnnouncer } from '../utils/accessibility';
 

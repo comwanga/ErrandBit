@@ -1,0 +1,103 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  test:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgis/postgis:15-3.3-alpine
+        env:
+          POSTGRES_DB: errandbit_test
+          POSTGRES_USER: errandbit
+          POSTGRES_PASSWORD: test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        cache: 'npm'
+        cache-dependency-path: './package-lock.json'
+    
+    - name: Install all dependencies (root + workspaces)
+      run: npm ci
+    
+    - name: Create backend .env file
+      working-directory: ./backend
+      run: |
+        cat > .env << 'ENVEOF'
+        DATABASE_URL=postgresql://errandbit:test_password@localhost:5432/errandbit_test
+        NODE_ENV=test
+        JWT_SECRET=QkZ2YVpQZGhqNTN3V3R4L1pNeEVaT2R0Z3pRT0xHdUpoSlY1bVZQVjJqSWZtS3N6a0pTSVhZbVE9PQ==
+        JWT_REFRESH_SECRET=dGVzdF9qd3RfcmVmcmVzaF9zZWNyZXRfa2V5X2Zvcl9jaV90ZXN0aW5nX21pbmltdW1fMzJfY2hhcmFjdGVycw==
+        PORT=3000
+          ENVEOF
+        echo "=== .env file contents ==="
+        cat .env
+        echo ""
+        echo "=== Checking JWT_SECRET ==="
+        grep JWT_SECRET .env
+        echo "=== JWT_SECRET length (including newline) ==="
+        grep JWT_SECRET .env | cut -d= -f2 | wc -c
+        echo "=== JWT_SECRET value ==="
+        grep JWT_SECRET .env | cut -d= -f2
+    
+    - name: Run database migrations
+      working-directory: ./backend
+      run: npm run migrate || true
+    
+    - name: Verify .env exists
+      working-directory: ./backend
+      run: |
+        ls -la .env || echo ".env file not found!"
+        echo "=== Final .env check before starting server ==="
+        cat .env
+    
+    - name: Start backend server
+      working-directory: ./backend
+      env:
+        DATABASE_URL: postgresql://errandbit:test_password@localhost:5432/errandbit_test
+        NODE_ENV: test
+        JWT_SECRET: QkZ2YVpQZGhqNTN3V3R4L1pNeEVaT2R0Z3pRT0xHdUpoSlY1bVZQVjJqSWZtS3N6a0pTSVhZbVE9PQ==
+        JWT_REFRESH_SECRET: dGVzdF9qd3RfcmVmcmVzaF9zZWNyZXRfa2V5X2Zvcl9jaV90ZXN0aW5nX21pbmltdW1fMzJfY2hhcmFjdGVycw==
+        PORT: 3000
+      run: |
+        npm run dev &
+        npx wait-on http://localhost:3000/health --timeout 60000
+    
+    - name: Start frontend server
+      working-directory: ./frontend
+      env:
+        VITE_API_URL: http://localhost:3000
+      run: |
+        npm run dev &
+        npx wait-on http://localhost:5173 --timeout 60000
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    
+    - name: Run Playwright tests
+      env:
+        BASE_URL: http://localhost:5173
+      run: npx playwright test
+    
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30

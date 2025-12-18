@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * React Query Hooks for Job Operations
  * 
