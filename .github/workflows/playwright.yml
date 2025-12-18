@@ -31,7 +31,7 @@ jobs:
       with:
         node-version: lts/*
         cache: 'npm'
-        cache-dependency-path: package-lock.json
+        cache-dependency-path: '**/package-lock.json'
     
     - name: Install all dependencies (root + workspaces)
       run: npm ci
